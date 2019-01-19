@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/mvc/spring-aop.xsd">
+
+    <!-- 自动扫描包中的Controlller(后端控制器)，并且把匹配的controller类注册成Bean-->
+    <context:component-scan base-package="com.demo.controller"/>
+
+    <!-- 默认配置方案。这个注解会自动注册RequestMappingHandlerMapping和RequestMappingHandlerAdapter两个Bean,
+     是Spring MVC为@Controller分发请求所必须的，并提供了数据绑定支持。。等功能-->
+    <mvc:annotation-driven/>
+
+    <!-- 配置JSP显示ViewResolver（视图解析器）。最常用的视图解析器。
+    当控制层返回hello时，InternalResourceViewResolver解析器会自动添加前缀和后缀，最终路径结果为/WEB-INF/views/hello.jsp-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/><!-- 前缀 -->
+        <property name="suffix" value=".jsp"/><!-- 后缀，自动拼接 -->
+    </bean>
+
+
+</beans>

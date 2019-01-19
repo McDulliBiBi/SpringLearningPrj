@@ -19,4 +19,30 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- Spring MVC配置开始-->
+    <!-- 配置DispatcherServlet -->
+    <servlet>
+        <servlet-name>spring-dispatcher</servlet-name>
+        <!-- DispatcherServlet是前置控制器，主要用于拦截匹配的请求。拦截匹配的规则要自己定义，把拦截下来的请求，
+        依据相应的规则分发到目标的Controller来处理，是Spring MVC配置的第一步-->
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 配置SpringMVC需加载的配置文件spring-mvc.xml-->
+        <init-param>
+            <!-- nit-param是指局部变量，只能在该Servlet中使用。容器启动时会加载配置文件spring-mvc.xml-->
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <!-- 容器启动时初始化该Servlet。
+            大于等于0，则容器在应用启动时加载并初始化这个Servlet.
+            小于0，则指示容器该Servlet在被选择时才加载。
+            正值越小，优先级越高，应用启动时越优先加载-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- servlet-mapping标签声明了与该Servlet相应的匹配规则。匹配规则有好几种-->
+    <servlet-mapping>
+        <servlet-name>spring-dispatcher</servlet-name>
+        <!-- 默认匹配所有请求-->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!-- Spring MVC配置结束-->
 </web-app>
