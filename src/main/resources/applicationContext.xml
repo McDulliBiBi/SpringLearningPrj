@@ -13,4 +13,37 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <!-- 扫描com.demo包及下面子包的所有java类，并把匹配的java类注册成Bean-->
     <context:component-scan base-package="com.demo"/>
 
+    <!-- mybatis配置相关。开始-->
+    <!-- 1.配置数据库相关参数-->
+    <!-- location表示属性文件的位置。 ignore-unresolvable是否忽略解析不到的属性-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
+    <!-- 2.数据源druid-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClasName}"></property>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 3.配置sqlSessionFactory对象。mybatis使用SqlSessionFactoryBean来创建Session工厂-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注入数据库连接池-->
+        <property name="dataSource" value="dataSource"/>
+        <!-- 扫描SQL配置文件：mapper需要的xml文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 扫描basePackage下所有以@MyBatisDAO注解的接口。mapperScannerConfigurer会查找类路径下的映射器并自动将他们创建成MapperFactoryBean-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- basePackage是为映射器接口文件设置基本的包路径-->
+        <property name="basePackage" value="com.demo.dao"/>
+    </bean>
+
+    <!-- mybatis配置相关。结束-->
 </beans>
